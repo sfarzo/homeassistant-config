@@ -1,0 +1,10 @@
+*
+!*.yaml
+!.gitignore
+deps
+tts
+secrets.yaml
+known_devices.yaml
+shellcommand.yaml
+home-assistant.log
+home-assistant_v2.db

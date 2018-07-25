@@ -1,0 +1,59 @@
+'1529566730605':
+  alias: Prova Telegram Notifier
+  sequence:
+  - data:
+      data:
+        photo:
+          url: https://www.notizie.it/wp-content/uploads/2011/08/GATTO-1-768x445.jpg
+      message: Message Test
+      title: Titolo Messaggio
+    service: notify.telegram_notifier
+telegram_posizione_fabrizio:
+  alias: Telegram-posizione-Fabrizio
+  sequence:
+  - data:
+      message: '*Posizione Fabrizio*'
+    service: telegram_bot.send_message
+  - data:
+      latitude: '{{states.sensor.gps_latitude_fabry.state}}'
+      longitude: '{{states.sensor.gps_longitude_fabry.state}}'
+    service: telegram_bot.send_location
+telegram_posizione_fede:
+  alias: Telegram-posizione-Fede
+  sequence:
+  - data:
+      message: '*Posizione Federico*'
+    service: telegram_bot.send_message
+  - data:
+      latitude: '{{states.sensor.gps_latitude_fede.state}}'
+      longitude: '{{states.sensor.gps_longitude_fede.state}}'
+    service: telegram_bot.send_location
+telegram_webcam1_snapshot:
+  alias: Snapshot webcam1
+  sequence:
+  - data: {}
+    service: shell_command.webcam1_take_screenshot
+  - data:
+      message: '*Snapshot Webcam1*'
+    service: telegram_bot.send_message
+  - data:
+      file: /tmp/ha_snapshot.jpg
+      caption: Webcam1
+    service: telegram_bot.send_photo
+'1529698373070':
+  alias: Speedtest update
+  sequence:
+  - data: {}
+    service: shell_command.speedtest
+ifttt_sonoff_switch1_on:
+  alias: Switch1_ON
+  sequence:
+  - data:
+      event: switch1_on
+    service: ifttt.trigger
+ifttt_sonoff_switch1_off:
+  alias: Switch1_OFF
+  sequence:
+  - data:
+      event: switch1_off
+    service: ifttt.trigger

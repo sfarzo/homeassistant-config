@@ -1,0 +1,43 @@
+device_tracker.amazon83704753b:
+  friendly_name: Tablet Federico
+sensor.adsl_downloadspeed:
+  icon: mdi:speedometer
+sensor.yr_symbol:
+  friendly_name: Meteo
+sensor.adsl_speedtest_download:
+  icon: mdi:speedometer
+sensor.phone_battery_fabry:
+  icon: mdi:battery-80
+sensor.gps_accuracy_fabry:
+  icon: mdi:crosshairs-gps
+sensor.connection_fabry:
+  icon: mdi:access-point
+sensor.phone_battery_fede:
+  icon: mdi:battery-80
+sensor.gps_accuracy_fede:
+  icon: mdi:crosshairs-gps
+sensor.connection_fede:
+  icon: mdi:access-point
+sensor.adsl_speedtest_ping:
+  icon: mdi:speedometer
+sensor.adsl_speedtest_upload:
+  icon: mdi:speedometer
+sensor.owm_condition:
+  friendly_name: OWM Meteo Attuale
+  icon: mdi:weather-sunny
+sensor.owm_humidity:
+  friendly_name: OWM Umidita
+  icon: mdi:water-percent
+sensor.owm_cloud_coverage:
+  friendly_name: OWM Nuvolosita
+  icon: mdi:weather-cloudy
+sensor.owm_temperature:
+  friendly_name: OWM Temperatura
+sensor.gps_latitude_fabry:
+  icon: mdi:crosshairs-gps
+sensor.gps_latitude_fede:
+  icon: mdi:crosshairs-gps
+sensor.gps_longitude_fabry:
+  icon: mdi:crosshairs-gps
+sensor.gps_longitude_fede:
+  icon: mdi:crosshairs-gps

@@ -1,0 +1,186 @@
+- id: '1529434715019'
+  alias: EsciDaCasa
+  trigger:
+  - entity_id: device_tracker.04b16729b98c
+    event: leave
+    platform: zone
+    zone: zone.home
+  condition: []
+  action:
+  - alias: ''
+    data:
+      event: TestHA_Trigger
+      value1: Fabrizio è uscito di casa
+    service: ifttt.trigger
+- id: '1529499934191'
+  alias: MichelleACasa
+  trigger:
+  - entity_id: device_tracker.serendipity
+    event: enter
+    platform: zone
+    zone: zone.home
+  condition: []
+  action:
+  - data:
+      latitude: '44.817007'
+      longitude: '7.242099'
+      message: '*Bentornata*'
+      title: '*Michelle è a casa*'
+    service: telegram_bot.send_location
+- id: '1529502976817'
+  alias: FabrizioACasa
+  trigger:
+  - entity_id: device_tracker.xiaomi_xiaomi
+    from: not_home
+    platform: state
+    to: home
+  condition: []
+  action:
+  - data:
+      message: Bentornato
+      title: '*Fabrizio a casa!*'
+    service: telegram_bot.send_message
+- id: '1529522304755'
+  alias: FabrizioEsceDaCasa
+  trigger:
+  - entity_id: device_tracker.xiaomi_xiaomi
+    from: home
+    platform: state
+    to: not_home
+  condition: []
+  action:
+  - data:
+      message: A presto
+      title: '*Fabrizio esce*'
+    service: telegram_bot.send_message
+- id: telegram-helper
+  alias: Telegram-HELP
+  trigger:
+  - event_data:
+      command: /start
+    event_type: telegram_command
+    platform: event
+  condition: []
+  action:
+  - data:
+      message: "Elenco dei comandi disponibili:\n*Start*: /start\n*Ping*: /ping\n\
+        *Webcam1 snapshot*: /webcam1\n-------\n*Localizza:* \n  *Fede*:  /locfede\n\
+        \  *Fabry*: /locfabry\n-------\n*Switches:* \n  *Switch1 ON*:  /switch1on\n\
+        \  *Switch1 OFF*: /switch1off\n"
+      title: '*Comandi disponibili*'
+    service: notify.telegram_notifier
+- id: '1529568936121'
+  alias: Telegram-PING-PONG
+  trigger:
+  - event_data:
+      command: /ping
+    event_type: telegram_command
+    platform: event
+  condition: []
+  action:
+  - data:
+      message: 'pong '
+    service: notify.telegram_notifier
+- id: '1529575174720'
+  alias: FabrizioAlLavoro
+  trigger:
+  - entity_id: device_tracker.xiaomi_xiaomi
+    event: enter
+    platform: zone
+    zone: zone.lavoropapa
+  condition: []
+  action:
+  - data:
+      message: Buon Lavoro
+      title: '*Fabrizio a lavoro!*'
+    service: telegram_bot.send_message
+- id: '1529664178964'
+  alias: Telegram-PosizioneFede
+  trigger:
+  - event_data:
+      command: /locfede
+    event_type: telegram_command
+    platform: event
+  condition: []
+  action:
+  - service: script.telegram_posizione_fede
+- id: '1529670498462'
+  alias: Nuova automazione
+  trigger:
+  - event_data:
+      command: /locfabry
+    event_type: telegram_command
+    platform: event
+  condition: []
+  action:
+  - service: script.telegram_posizione_fabrizio
+- id: telegram_webcam1_snapshot
+  alias: Telegram-Webcam1-snapshot
+  trigger:
+  - event_data:
+      command: /webcam1
+    event_type: telegram_command
+    platform: event
+  condition: []
+  action:
+  - service: script.telegram_webcam1_snapshot
+- id: '1529679375509'
+  alias: Webcam1 Preset
+  trigger:
+  - entity_id: input_number.camera1_preset
+    platform: state
+  condition: []
+  action:
+  - data:
+      position: '{{states.input_number.camera1_preset.state | int}}'
+    service: shell_command.webcam1_preset
+- id: '1530540499579'
+  alias: IFTTT_sonoff_switch1_on
+  trigger:
+  - entity_id: input_boolean.ifttt_switch1
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - service: script.ifttt_sonoff_switch1_on
+- id: '1530540590090'
+  alias: IFTTT_sonoff_switch1_off
+  trigger:
+  - entity_id: input_boolean.ifttt_switch1
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - service: script.ifttt_sonoff_switch1_off
+- id: telegram_switch1_on
+  alias: Telegram_switch1_on
+  trigger:
+  - event_data:
+      command: /switch1on
+    event_type: telegram_command
+    platform: event
+  condition: []
+  action:
+  - alias: ''
+    data:
+      entity_id: input_boolean.ifttt_switch1
+    service: input_boolean.turn_on
+  - data:
+      message: Switch1 ON
+    service: notify.telegram_notifier
+- id: telegram_switch1_off
+  alias: Telegram_switch1_off
+  trigger:
+  - event_data:
+      command: /switch1off
+    event_type: telegram_command
+    platform: event
+  condition: []
+  action:
+  - alias: ''
+    data:
+      entity_id: input_boolean.ifttt_switch1
+    service: input_boolean.turn_off
+  - data:
+      message: Switch1 OFF
+    service: notify.telegram_notifier

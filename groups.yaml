@@ -1,0 +1,120 @@
+# COVERS BLOCK
+
+covers_overview_group:
+  name: Cover Overview
+  view: yes
+  icon: mdi:window-open
+  entities:
+    - group.cover_sala_group  
+    - group.cover_cucina_group  
+    - group.cover_federico_group
+    - group.cover_bagno_group
+    - group.cover_camera_group  
+cover_sala_group:
+  name: Sala
+  entities: 
+     - cover.sala_porta
+     - cover.sala_finestra
+cover_cucina_group:
+  name: Cucina
+  entities: 
+     - cover.cucina_porta
+     - cover.cucina_finestra
+cover_camera_group:
+  name: Camera 
+  entities: 
+     - cover.camera_porta
+     - cover.camera_finestra
+cover_federico_group:
+  name: Federico 
+  entities: 
+     - cover.federico_finestra
+cover_bagno_group:
+  name: Bagno 
+  entities: 
+     - cover.bagno_finestra
+# PHONE BLOCK
+phone_fabry_group:
+  name: Fabry Phone
+  entities:
+    - device_tracker.xiaomi_xiaomi
+    - sensor.phone_battery_fabry
+    - sensor.connection_fabry
+    - sensor.gps_accuracy_fabry
+    - sensor.gps_latitude_fabry
+    - sensor.gps_longitude_fabry  
+    - automation.fabrizioacasa 
+    - automation.fabrizioescedacasa
+    - automation.fabrizioallavoro 
+phone_fede_group:
+  name: Fede Phone
+  entities:
+    - device_tracker.s3mini_s3mini
+    - sensor.phone_battery_fede
+    - sensor.connection_fede
+    - sensor.gps_accuracy_fede
+    - sensor.gps_latitude_fede
+    - sensor.gps_longitude_fede  
+
+phone_overview_group:
+  name: Phone Overview 
+  view: yes
+  icon: mdi:cellphone-android 
+  entities:
+    - device_tracker.serendipity
+    - group.phone_fede_group
+    - group.phone_fabry_group  
+
+# COMPUTER BLOCK      
+speed_test_group:
+  name: SpeedTest
+  icon: mdi:speedometer 
+  entities:
+   - sensor.adsl_speedtest_download
+   - sensor.adsl_speedtest_upload
+   - sensor.adsl_speedtest_ping
+
+server_status_group:
+  name: Server Status 
+  entities:
+   - sensor.processor_use      
+   - sensor.memory_free
+   - sensor.memory_use_percent
+   - sensor.disk_use_percent_
+   - sensor.disk_free_
+   - sensor.network_in_eth0
+   - sensor.network_out_eth0  
+   - sensor.last_boot
+   - sensor.since_last_boot
+
+server_overview_group:
+  name: Server Overview 
+  view: yes
+  icon: mdi:laptop 
+  entities:
+    - group.server_status_group
+    - group.speed_test_group  
+
+# WEATHER BLOCK
+weeather_group:
+  name: Weather 
+  entities:
+    - sensor.yr_symbol      
+    - sensor.owm_condition
+    - sensor.owm_temperature
+    - sensor.owm_humidity  
+    - sensor.owm_cloud_coverage  
+
+# WEBCAM BLOCK
+webcam1_group:
+  name: Webcam1 
+  entities:
+    - camera.webcam1      
+    - input_number.camera1_preset      
+
+webcam_overview_group:
+  name: Webcam Overview 
+  view: yes
+  icon: mdi:cctv 
+  entities:
+    - group.webcam1_group

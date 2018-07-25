@@ -1,0 +1,337 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  #latitude: 44.816938
+  #longitude: 7.235493
+  latitude: !secret home_latitude
+  longitude: !secret home_longitude
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 475
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: Europe/Rome
+  # Customization file
+  customize: !include customize.yaml
+  whitelist_external_dirs: /tmp
+
+# Show links to resources in log and frontend
+#introduction:
+
+# Enables the frontend
+frontend:
+
+# Enables configuration UI
+config:
+
+http:
+  # Secrets are defined in the file secrets.yaml
+  api_password: !secret http_password
+  # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+  # base_url: example.duckdns.org:8123
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+
+# Discover some devices automatically
+discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time
+history:
+
+# View all events in a logbook
+logbook:
+
+# Enables a map showing the location of tracked devices
+map:
+
+# Track the sun
+sun:
+
+# Weather prediction
+sensor:
+  - platform: yr
+    sensor:
+  - platform: openweathermap
+    api_key: !secret openweathermap_apikey 
+    monitored_conditions:
+      - weather 
+      - temperature
+      - humidity
+      - clouds  
+    language: it
+
+        #- platform: random 
+  #  - platform: fail2ban
+  #    jails:
+  #        - ssh
+  #        - hass-iptables
+
+    # SpeedTest Block
+  - platform: file
+    name: ADSL SpeedTest Download 
+    file_path: /tmp/speedtest.json
+    value_template: '{{ (value_json.download / 1000000) | round(3)}}'
+    unit_of_measurement: 'Mbit/s'
+    icon: mdi:speedometer
+  
+  - platform: file
+    name: ADSL SpeedTest Upload 
+    file_path: /tmp/speedtest.json
+    value_template: '{{ (value_json.upload / 1000000) | round(3)}}'
+    unit_of_measurement: 'Mbit/s'
+    icon: mdi:speedometer
+
+  - platform: file
+    name: ADSL SpeedTest Ping 
+    file_path: /tmp/speedtest.json
+    value_template: '{{ value_json.ping  }}'
+    unit_of_measurement: 'ms'
+    icon: mdi:speedometer
+
+    # Server sensonrs block
+  - platform: systemmonitor
+    resources:
+      - type: disk_use_percent
+        arg: /
+      - type: disk_free
+        arg: /
+      - type: memory_free
+      - type: memory_use_percent
+      - type: network_in 
+        arg: eth0 
+      - type: network_out 
+        arg: eth0 
+      - type: processor_use
+      - type: since_last_boot  
+      - type: last_boot  
+ 
+    # Fabrizio Phone Sensor Block:
+  - platform: mqtt
+    state_topic: owntracks/xiaomi/xiaomi
+    name: Phone Battery (Fabry)
+    unit_of_measurement: '%'
+    value_template: >
+      {% if value_json.batt %}
+       {{ value_json.batt }}
+      {% else %}
+         {{ states('sensor.phone_battery_fabry') }}
+      {% endif %} 
+  
+  - platform: mqtt
+    state_topic: owntracks/xiaomi/xiaomi
+    name: Connection (Fabry)
+    value_template: >
+      {% if value_json.conn %}
+        {% if value_json.conn == 'w' %}
+          WiFi
+        {% else %}
+          Mobile
+        {% endif %} 
+      {% else %}
+         {{ states('sensor.connection_fabry') }}
+      {% endif %}
+
+  - platform: mqtt
+    state_topic: owntracks/xiaomi/xiaomi
+    name: GPS Accuracy (Fabry)
+    value_template: >
+      {% if value_json.acc %}
+         {{ value_json.acc }}
+      {% else %}
+         {{ states('sensor.gps_accuracy_fabry') }}
+      {% endif %}
+  - platform: mqtt
+    state_topic: owntracks/xiaomi/xiaomi
+    name: GPS latitude (Fabry)
+    value_template: >
+      {% if value_json.lat %}
+         {{ value_json.lat }}
+      {% else %}
+         {{ states('sensor.gps_latitude_fabry') }}
+      {% endif %}
+  - platform: mqtt
+    state_topic: owntracks/xiaomi/xiaomi
+    name: GPS longitude (Fabry)
+    value_template: >
+      {% if value_json.lon %}
+         {{ value_json.lon }}
+      {% else %}
+         {{ states('sensor.gps_longitude_fabry') }}
+      {% endif %}
+# Federico Phone Sensor Block:
+  - platform: mqtt
+    state_topic: owntracks/s3mini/s3mini
+    name: Phone Battery (fede)
+    unit_of_measurement: '%'
+    value_template: >
+      {% if value_json.batt %}
+       {{ value_json.batt }}
+      {% else %}
+         {{ states('sensor.phone_battery_fede') }}
+      {% endif %} 
+  
+  - platform: mqtt
+    state_topic: owntracks/s3mini/s3mini
+    name: Connection (Fede)
+    value_template: >
+      {% if value_json.conn %}
+        {% if value_json.conn == 'w' %}
+          WiFi
+        {% else %}
+          Mobile
+        {% endif %} 
+      {% else %}
+         {{ states('sensor.connection_fede') }}
+      {% endif %}
+
+  - platform: mqtt
+    state_topic: owntracks/s3mini/s3mini
+    name: GPS Accuracy (Fede)
+    value_template: >
+      {% if value_json.acc %}
+         {{ value_json.acc }}
+      {% else %}
+         {{ states('sensor.gps_accuracy_fede') }}
+      {% endif %}
+  - platform: mqtt
+    state_topic: owntracks/s3mini/s3mini
+    name: GPS latitude (Fede)
+    value_template: >
+      {% if value_json.lat %}
+         {{ value_json.lat }}
+      {% else %}
+         {{ states('sensor.gps_latitude_fede') }}
+      {% endif %}
+  - platform: mqtt
+    state_topic: owntracks/s3mini/s3mini
+    name: GPS longitude (Fede)
+    value_template: >
+      {% if value_json.lon %}
+         {{ value_json.lon }}
+      {% else %}
+         {{ states('sensor.gps_longitude_fede') }}
+      {% endif %}
+# Text to speech
+tts:
+  - platform: google
+
+
+# Cloud
+cloud:
+
+ifttt:
+ key: !secret ifttt_key
+
+input_boolean:
+  ifttt_switch1:
+    name: Switch1 (sonoff) 
+    initial: off
+ 
+zone:        
+  - name: Home
+    latitude: !secret home_latitude 
+    longitude: !secret home_longitude 
+    radius: 100
+    icon: mdi:account-multiple    
+  
+  - name: Lavoro-papà
+    latitude: !secret work_latitude
+    longitude: !secret work_longitude
+    radius: 100
+    icon: mdi:briefcase
+
+device_tracker:    
+  - platform: mikrotik
+    host: 192.168.88.1
+    username: !secret mikrotik_user
+    password: !secret mikrotik_passwd 
+    interval_seconds: 10
+    consider_home: 300
+  - platform: owntracks
+
+# Telegram
+telegram_bot:
+ - platform: polling
+   api_key: !secret telegram_apikey 
+   allowed_chat_ids:
+     - 265550401 
+       #     - CHAT_ID_2
+       #     - CHAT_ID_3    
+  
+notify:
+ - name: telegram_notifier 
+   platform: telegram
+   chat_id: 265550401
+
+#Mqtt broker
+mqtt: 
+  broker: m23.cloudmqtt.com
+  port: 17772
+  username: !secret cloudmqtt_user 
+  password: !secret cloudmqtt_passwd
+  client_id: !secret cloudmqtt_client_id
+
+#Camera
+camera:
+ - platform: generic
+   still_image_url: http://ipcam.lan:8080/image/jpeg.cgi  
+   username: !secret webcam_user 
+   password: !secret webcam_passwd
+   name: webcam1
+
+input_number:
+  camera1_preset:
+    name: WebCam preset position
+    initial: 1 
+    min: 1
+    max: 10 
+    step: 1   
+
+# SCSGATE
+scsgate:
+  device: 192.168.88.24
+  port: 52056
+
+cover:
+  - platform: scsgate
+    devices:
+      sala_finestra:
+              name: Sala Finestra 
+              scs_id: 22  
+      sala_porta:
+              name: Sala Porta  
+              scs_id: 21  
+      cucina_finestra:
+              name: Cucina Finestra
+              scs_id: 15  
+      cucina_porta:
+              name: Cucina Porta
+              scs_id: 16  
+      federico_finestra:
+              name: Federico Finestra
+              scs_id: 11  
+      bagno_finestra:
+              name: Bagno Finestra
+              scs_id: 12  
+      camera_finestra:
+              name: Camera Finestra
+              scs_id: 13  
+      camera_porta:
+              name: Camera Porta
+              scs_id: 14  
+
+shell_command:  !include shellcommand.yaml 
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
